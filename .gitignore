@@ -1,9 +1,9 @@
 # Folders and Modules
-
 .pnpm-store/
 node_modules/
+dist/
+*.tsbuildinfo
 
 # Environment Variables and APIs
-
 .env.local
 serviceAccountKey.json
