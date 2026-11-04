@@ -1,0 +1,4 @@
+import {onAuthStateChanged,getIdTokenResult,type User} from 'firebase/auth'; import {createContext,useContext,useEffect,useMemo,useState,type ReactNode} from 'react'; import {auth} from '../../data/firebase';
+interface AuthValue{user:User|null;isAdmin:boolean;loading:boolean} const Context=createContext<AuthValue>({user:null,isAdmin:false,loading:true});
+export function AuthProvider({children}:{children:ReactNode}){const [state,setState]=useState<AuthValue>({user:null,isAdmin:false,loading:true});useEffect(()=>onAuthStateChanged(auth,async user=>{if(!user){setState({user:null,isAdmin:false,loading:false});return}try{const token=await getIdTokenResult(user);setState({user,isAdmin:token.claims.admin===true,loading:false})}catch{setState({user,isAdmin:false,loading:false})}}),[]);const value=useMemo(()=>state,[state]);return <Context.Provider value={value}>{children}</Context.Provider>}
+export const useAuth=()=>useContext(Context);

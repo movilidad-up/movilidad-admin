@@ -1,0 +1,2 @@
+import {Navigate,Outlet,useLocation} from 'react-router-dom'; import {useAuth} from '../providers/AuthProvider';
+export function AdminGuard(){const{user,isAdmin,loading}=useAuth(),location=useLocation();if(loading)return <div className="center-screen">Verificando acceso…</div>;if(!user)return <Navigate to="/login" replace state={{from:location}}/>;if(!isAdmin)return <div className="center-screen"><div><h1>Acceso restringido</h1><p>Tu cuenta no tiene permisos de administrador.</p></div></div>;return <Outlet/>}

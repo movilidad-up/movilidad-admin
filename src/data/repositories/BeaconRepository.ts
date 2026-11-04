@@ -1,0 +1,3 @@
+import {collection,deleteDoc,doc,getDocs,setDoc} from 'firebase/firestore'; import {db} from '../firebase'; import type {Beacon} from '../../domain/types/attendance';
+const col=collection(db,'beacons'),normalize=(mac:string)=>mac.trim().toUpperCase();
+export const BeaconRepository={async getAll():Promise<Beacon[]>{const snap=await getDocs(col);return snap.docs.map(x=>({...x.data(),id:x.id,macAddress:x.id} as Beacon))},async save(beacon:Omit<Beacon,'id'>):Promise<void>{const mac=normalize(beacon.macAddress);await setDoc(doc(db,'beacons',mac),{...beacon,macAddress:mac})},async remove(mac:string):Promise<void>{await deleteDoc(doc(db,'beacons',normalize(mac)))}};
